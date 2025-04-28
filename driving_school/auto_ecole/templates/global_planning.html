@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Planning général{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 30px;">Planning des rendez-vous</h2>
+
+  {% if appointments %}
+    <div style="overflow-x:auto;">
+      <table style="width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        <thead style="background-color: #8e44ad; color: white;">
+          <tr>
+            <th style="padding: 12px;">Date</th>
+            <th style="padding: 12px;">Heure</th>
+            <th style="padding: 12px;">Élève</th>
+            <th style="padding: 12px;">Instructeur</th>
+            <th style="padding: 12px;">Lieu</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for appointment in appointments %}
+            <tr style="text-align: center; border-bottom: 1px solid #ddd;">
+              <td style="padding: 12px;">{{ appointment.date }}</td>
+              <td style="padding: 12px;">{{ appointment.time }}</td>
+              <td style="padding: 12px;">
+                <a href="{% url 'student_detail' appointment.student.id %}" style="text-decoration: none; font-weight: bold; color: black;">
+                  {{ appointment.student.user.username }}
+                </a>
+              </td>
+              <td style="padding: 12px;">{{ appointment.instructor.user.username }}</td>
+              <td style="padding: 12px;">{{ appointment.location }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>Aucun rendez-vous prévu pour le moment.</p>
+  {% endif %}
+
+  <div style="margin-top: 30px;">
+    <a href="{% url 'secretary_dashboard' %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold; display: inline-block; transition: 0.3s;">
+      Retour au dashboard secrétaire
+    </a>
+  </div>
+{% endblock %}

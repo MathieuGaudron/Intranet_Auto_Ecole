@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Créer un rendez-vous{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">
+    {% if student %}
+      Prendre un rendez-vous avec {{ student.user.username }}
+    {% elif instructor %}
+      Créer un rendez-vous pour {{ instructor.user.username }}
+    {% else %}
+      Prendre un rendez-vous
+    {% endif %}
+  </h2>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+
+  <form method="post" style="max-width: 400px;">
+    {% csrf_token %}
+
+    {% if students %}
+      <div style="margin-bottom: 15px;">
+        <label for="student">Élève :</label><br>
+        <select name="student" required style="width:100%; padding:10px; border-radius:5px;">
+          {% for s in students %}
+            <option value="{{ s.id }}">{{ s.user.username }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endif %}
+
+    {% if user.secretary %}
+      <div style="margin-bottom: 15px;">
+        <label for="instructor">Instructeur :</label><br>
+        {{ form.instructor }}
+      </div>
+    {% endif %}
+
+    <div style="margin-bottom: 15px;">
+      <label for="date">Date :</label><br>
+      {{ form.date }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label for="time">Heure :</label><br>
+      {{ form.time }}
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label for="location">Lieu :</label><br>
+      {{ form.location }}
+    </div>
+
+    <button type="submit" class="btn-purple">Valider</button>
+  </form>
+
+  <div style="margin-top: 20px;">
+    {% if instructor %}
+      <a href="{% url 'instructor_detail' instructor.id %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold;">
+        Retour à la fiche instructeur
+      </a>
+    {% elif student %}
+      <a href="{% url 'student_detail' student.id %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold;">
+        Retour à la fiche élève
+      </a>
+    {% elif user.secretary %}
+      <a href="{% url 'secretary_dashboard' %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold;">
+        Retour au dashboard secrétaire
+      </a>
+    {% else %}
+      <a href="{% url 'instructor_dashboard' %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold;">
+        Retour au dashboard
+      </a>
+    {% endif %}
+  </div>
+{% endblock %}

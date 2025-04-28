@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Fiche élève{% endblock %}
+
+{% block content %}
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% else %}
+    <h2 style="margin-bottom: 20px;">
+      Fiche de <span style="color: #8e44ad;">{{ student.user.username }}</span>
+    </h2>
+
+    <div style="
+      background-color: #f9f7fb;
+      padding: 25px;
+      border-radius: 10px;
+      border-left: 5px solid #8e44ad;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      max-width: 500px;
+      margin-bottom: 30px;
+    ">
+
+      <p style="margin: 10px 0;">
+        <svg style="width:16px;height:16px;vertical-align:middle;margin-right:8px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        <strong>Nom :</strong> {{ student.user.last_name }}
+      </p>
+
+      <p style="margin: 10px 0;">
+        <svg style="width:16px;height:16px;vertical-align:middle;margin-right:8px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        <strong>Prénom :</strong> {{ student.user.first_name }}
+      </p>
+
+      <p style="margin: 10px 0;">
+        <svg style="width:16px;height:16px;vertical-align:middle;margin-right:8px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>
+        <strong>Email :</strong> {{ student.user.email }}
+      </p>
+
+      <p style="margin: 10px 0;">
+        <svg style="width:16px;height:16px;vertical-align:middle;margin-right:8px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M17 1H7c-1.1 0-2 .9-2 2v18l7-3 7 3V3c0-1.1-.9-2-2-2z"/>
+        </svg>
+        <strong>Heures restantes :</strong> {{ student.hours_available }}
+      </p>
+
+    </div>
+
+    <a href="{% url 'create_appointment' student.id %}" style="text-decoration: none;background-color: #8e44ad; padding: 10px 20px;font-weight: bold; display: inline-block;border-radius: 6px;color: white;">
+      Ajouter un rendez-vous
+    </a>
+
+    {% if appointments %}
+      <h3 style="margin-top: 40px; margin-bottom: 20px;">Rendez-vous associés :</h3>
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        {% for rdv in appointments %}
+        <div style="background-color: #f9f7fb; padding: 15px 20px; border-radius: 8px; border-left: 5px solid #8e44ad; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+      
+          <p style="margin: 5px 0;"><strong>Date :</strong> {{ rdv.date }}</p>
+          <p style="margin: 5px 0;"><strong>Heure :</strong> {{ rdv.time }}</p>
+      
+          {% if user_role != 'instructor' %}
+            <p style="margin: 5px 0;"><strong>Instructeur :</strong> {{ rdv.instructor.user.username }}</p>
+          {% endif %}
+      
+          <div style="margin: 5px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <p style="margin: 0;"><strong>Lieu :</strong> {{ rdv.location }}</p>
+      
+            {% if user_role == 'instructor' or user_role == 'secretary' %}
+              <div style="display: flex; gap: 10px; align-items: center;">
+      
+                <a href="{% url 'edit_appointment' rdv.id %}" style="background-color: black; padding: 8px; border-radius: 6px; text-decoration: none; display: flex; align-items: center;" title="Modifier le rendez-vous">
+                  <svg style="width:20px;height:20px;fill:white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM21.41 6.34c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                  </svg>
+                </a>
+      
+                <form action="{% url 'delete_appointment' rdv.id %}" method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" style="background-color: crimson; padding: 8px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center;" title="Annuler le rendez-vous">
+                    <svg style="width:20px;height:20px;fill:white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                    </svg>
+                  </button>
+                </form>
+      
+              </div>
+            {% endif %}
+          </div>
+      
+        </div>
+      {% endfor %}
+      
+
+
+      </div>
+    {% else %}
+      {% if user_role != 'student' %}
+        <p style="margin-top: 30px;">Aucun rendez-vous.</p>
+      {% endif %}
+    {% endif %}
+
+    <div style="margin-top: 40px;">
+      {% if user_role == 'instructor' %}
+        <a href="{% url 'instructor_dashboard' %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold; display: inline-block; transition: 0.3s;">
+          Retour au dashboard instructeur
+        </a>
+      {% elif user_role == 'secretary' %}
+        <a href="{% url 'global_planning' %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold; display: inline-block; margin-right: 10px; transition: 0.3s;">
+          Retour au planning
+        </a>
+        <a href="{% url 'secretary_dashboard' %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold; display: inline-block; transition: 0.3s;">
+          Retour au dashboard secrétaire
+        </a>
+      {% endif %}
+    </div>
+
+  {% endif %}
+{% endblock %}

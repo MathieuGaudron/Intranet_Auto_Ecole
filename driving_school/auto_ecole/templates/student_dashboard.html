@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard étudiant{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% else %}
+        <h1 style="margin-bottom: 20px;">{{ student.user.username }}</h1>
+        <p style="font-size: 18px; margin-bottom: 30px;">
+            <svg style="width:18px;height:18px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.82 12.65l.57.92C9.6 16.3 11.7 18 14 18s4.4-1.7 5.6-4.43l.57-.92c.17-.28.26-.61.26-.95 0-1.11-.89-2-2-2H9.96c-.38 0-.74.15-1.01.41l-1.13 1.19zM17 7h-1V4h-2v3H10V4H8v3H7c-1.1 0-2 .89-2 2v1h14V9c0-1.11-.9-2-2-2z"/>
+            </svg>
+            <strong>Heures restantes :</strong> {{ student.hours_available }}
+        </p>
+
+        <h2 style="margin-bottom: 15px;">Rendez-vous à venir :</h2>
+
+        {% if appointments %}
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                {% for rdv in appointments %}
+                    <div style="
+                        background-color: #f9f7fb;
+                        border-left: 5px solid #8e44ad;
+                        padding: 15px 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                    ">
+                        <p style="margin: 5px 0;">
+                            <svg style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.89-1.99 2L3 20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6c0-1.11-.89-2-2-2zm0 16H5V9h14v11z"/></svg>
+                            <strong>Date :</strong> {{ rdv.date }}
+                        </p>
+
+                        <p style="margin: 5px 0;">
+                            <svg style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8 3.59 8 8 8zm.5-13h-1v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+                            <strong>Heure :</strong> {{ rdv.time }}
+                        </p>
+
+                        <p style="margin: 5px 0;">
+                            <svg style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            <strong>Instructeur :</strong> {{ rdv.instructor.user.username }}
+                        </p>
+
+                        <p style="margin: 5px 0;">
+                            <svg style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+                            <strong>Lieu :</strong> {{ rdv.location }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucun rendez-vous prévu.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Instructeur{% endblock %}
+
+{% block content %}
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% else %}
+        <h2 style="margin-bottom: 30px;">Bienvenue {{ instructor.user.username }}</h2>
+
+        <div style="margin-bottom: 30px;">
+            <a href="{% url 'create_appointment_from_dashboard' %}" style="background-color: green; color: white; font-weight: bold; padding: 5px;border-radius: 5px; text-decoration: none;">
+                Ajouter un rendez-vous
+            </a>
+        </div>
+
+        <h3 style="margin-bottom: 15px;">Vos rendez-vous :</h3>
+
+        {% if appointments %}
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                {% for rdv in appointments %}
+                    <div style="background-color: #f9f7fb; border-left: 5px solid #8e44ad; padding: 15px 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                
+                    <p style="margin: 5px 0;">
+                        <svg style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.89-1.99 2L3 20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6c0-1.11-.89-2-2-2zm0 16H5V9h14v11z"/>
+                        </svg>
+                        <strong>Date :</strong> {{ rdv.date }}
+                    </p>
+                
+                    <p style="margin: 5px 0;">
+                        <svg style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8 3.59 8 8 8zm.5-13h-1v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+                        </svg>
+                        <strong>Heure :</strong> {{ rdv.time }}
+                    </p>
+                
+                    <p style="margin: 5px 0;">
+                        <svg style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        <strong>Élève :</strong> {{ rdv.student.user.username }}
+                    </p>
+                
+                    <p style="margin: 5px 0;">
+                        <svg style="width:16px;height:16px;vertical-align:middle;margin-right:6px;" fill="#8e44ad" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+                        </svg>
+                        <strong>Lieu :</strong> {{ rdv.location }}
+                    </p>
+                
+                        <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <a href="{% url 'student_detail' rdv.student.id %}" style="text-decoration: none; font-weight: bold; color: #8e44ad;">
+                            Voir la fiche élève
+                            </a>
+
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                            <a href="{% url 'edit_appointment' rdv.id %}" style="background-color: black; padding: 8px; border-radius: 6px; text-decoration: none; display: flex; align-items: center;" title="Modifier">
+                                <svg style="width:20px;height:20px;fill:white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM21.41 6.34c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                </svg>
+                            </a>
+                    
+                            <form action="{% url 'delete_appointment' rdv.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" style="background-color: crimson; padding: 8px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center;" title="Annuler">
+                                <svg style="width:20px;height:20px;fill:white;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                </svg>
+                                </button>
+                            </form>
+                            </div>
+                    
+                        </div>
+                
+                    </div>
+                {% endfor %}
+              
+
+            </div>
+        {% else %}
+            <p>Vous n’avez aucun rendez-vous prévu.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Ajouter un élève{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Ajouter un nouvel élève</h2>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 15px; max-width: 400px;">
+    {% csrf_token %}
+
+    <input type="text" name="username" placeholder="Nom d'utilisateur" required style="padding:10px; border-radius:5px;">
+    <input type="text" name="first_name" placeholder="Prénom" required style="padding:10px; border-radius:5px;">
+    <input type="text" name="last_name" placeholder="Nom" required style="padding:10px; border-radius:5px;">
+    <input type="email" name="email" placeholder="Email" required style="padding:10px; border-radius:5px;">
+    <input type="password" name="password" placeholder="Mot de passe" required style="padding:10px; border-radius:5px;">
+    <input type="number" name="hours_available" placeholder="Heures disponibles" required style="padding:10px; border-radius:5px;">
+
+    <button type="submit" style="background-color: #8e44ad; color: white; padding: 10px 20px; border-radius: 6px; font-weight: bold; border: none; cursor: pointer;">
+      Ajouter l'élève
+    </button>
+  </form>
+
+  <div style="margin-top: 20px;">
+    <a href="{% url 'manage_students' %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold;">
+      Retour à la gestion des élèves
+    </a>
+  </div>
+{% endblock %}

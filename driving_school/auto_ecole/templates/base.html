@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}OTAU AIKOL{% endblock %}</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f2f0f5;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #2d2143;
+        color: white;
+        padding: 20px 30px;
+        box-shadow: 0 4px 6px rgba(189, 147, 249, 0.2);
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 28px;
+        letter-spacing: 1px;
+      }
+
+      nav {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      nav a,
+      nav span {
+        color: #bd93f9;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      nav a:hover {
+        color: #ffffff;
+      }
+
+      nav form {
+        display: inline;
+      }
+
+      nav button {
+        background: none;
+        border: none;
+        color: #bd93f9;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 0;
+        font-family: inherit;
+      }
+
+      nav button:hover {
+        color: #ffffff;
+      }
+
+      main {
+        padding: 40px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .content-box {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(189, 147, 249, 0.07);
+        border-left: 5px solid #bd93f955;
+      }
+/* 
+      button {
+        background-color: #8e44ad;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: medium;
+      }
+
+      button:hover {
+        background-color: #732d91;
+      } */
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>OTAU AIKOL</h1>
+      <nav>
+        {% if user.is_authenticated %}
+        <span>{{ user.username }} </span>
+        <form action="/accounts/logout/" method="post">
+          {% csrf_token %}
+          <button type="submit" style="font-size: medium;">Se déconnecter</button>
+        </form>
+        {% endif %}
+
+        <!-- <a href="/student/dashboard/">Accueil étudiant</a> -->
+
+        {% if user.is_staff %}
+        <a href="/admin/">Admin</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <main>
+      <div class="content-box">{% block content %} {% endblock %}</div>
+    </main>
+  </body>
+</html>

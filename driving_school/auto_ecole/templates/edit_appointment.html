@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier le rendez-vous{% endblock %}
+
+{% block content %}
+  <h2>Modifier le RDV avec {{ appointment.student.user.username }}</h2>
+
+  <form method="post" style="max-width: 400px;">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" style="
+    text-decoration: none;
+    background-color: #000000;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;">Enregistrer les modifications</button>
+  </form>
+
+  <div style="margin-top: 20px;">
+    <a href="{% url 'instructor_dashboard' %}" style="
+    text-decoration: none;
+    background-color: #8e44ad;
+    padding: 10px 20px;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;">Retour au dashboard</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier un élève{% endblock %}
+
+{% block content %}
+  <h2 style="margin-bottom: 20px;">Modifier les informations de l'élève : <span style="color: #8e44ad;">{{ student.user.username }}</span></h2>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 15px; max-width: 400px;">
+    {% csrf_token %}
+    
+    <label for="id_hours_available" style="font-weight: bold;">Heures disponibles :</label>
+    {{ form.hours_available }}
+
+    <button type="submit" style="
+      background-color: #8e44ad;
+      padding: 10px 20px;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      ">
+      Mettre à jour
+    </button>
+  </form>
+
+  <div style="margin-top: 20px;">
+    <a href="{% url 'manage_students' %}" style="text-decoration: none; background-color: #8e44ad; padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold;">
+      Retour à la liste des élèves
+    </a>
+  </div>
+{% endblock %}
